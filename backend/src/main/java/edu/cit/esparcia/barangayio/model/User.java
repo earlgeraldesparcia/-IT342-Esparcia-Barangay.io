@@ -23,6 +23,12 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
     
+    @Column(name = "phone_number", nullable = false)
+    private String phoneNumber;
+    
+    @Column(nullable = false)
+    private String address;
+    
     @Column(nullable = false)
     private String role = "resident";
     
@@ -78,6 +84,22 @@ public class User {
     
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+    
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    
+    public String getAddress() {
+        return address;
+    }
+    
+    public void setAddress(String address) {
+        this.address = address;
     }
     
     public String getRole() {

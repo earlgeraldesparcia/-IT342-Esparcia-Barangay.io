@@ -9,7 +9,9 @@ function Registration() {
     lastName: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    phoneNumber: '',
+    address: ''
   });
 
   const [errors, setErrors] = useState({});
@@ -41,6 +43,14 @@ function Registration() {
     
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
+    }
+    
+    if (!formData.phoneNumber.trim()) {
+      newErrors.phoneNumber = 'Phone number is required';
+    }
+    
+    if (!formData.address.trim()) {
+      newErrors.address = 'Address is required';
     }
     
     setErrors(newErrors);
@@ -80,7 +90,9 @@ function Registration() {
           firstName: formData.firstName,
           lastName: formData.lastName,
           email: formData.email,
-          password: formData.password
+          password: formData.password,
+          phoneNumber: formData.phoneNumber,
+          address: formData.address
         }),
       });
       
@@ -150,6 +162,34 @@ function Registration() {
                 className={errors.email ? 'error' : ''}
               />
               {errors.email && <span className="error-message">{errors.email}</span>}
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="phoneNumber">Phone Number <span className="required">*</span></label>
+              <input
+                type="tel"
+                id="phoneNumber"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                placeholder="+63 912 345 6789"
+                className={errors.phoneNumber ? 'error' : ''}
+              />
+              {errors.phoneNumber && <span className="error-message">{errors.phoneNumber}</span>}
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="address">Address <span className="required">*</span></label>
+              <textarea
+                id="address"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                placeholder="Enter your complete address"
+                rows="3"
+                className={errors.address ? 'error' : ''}
+              />
+              {errors.address && <span className="error-message">{errors.address}</span>}
             </div>
           </div>
           

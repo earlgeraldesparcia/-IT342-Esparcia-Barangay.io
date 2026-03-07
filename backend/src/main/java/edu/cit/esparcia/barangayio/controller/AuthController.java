@@ -1,6 +1,7 @@
 package edu.cit.esparcia.barangayio.controller;
 
 import edu.cit.esparcia.barangayio.model.User;
+import edu.cit.esparcia.barangayio.payload.LoginRequest;
 import edu.cit.esparcia.barangayio.payload.MessageResponse;
 import edu.cit.esparcia.barangayio.payload.RegisterRequest;
 import edu.cit.esparcia.barangayio.service.AuthService;
@@ -9,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -54,10 +58,36 @@ public class AuthController {
         try {
             User user = authService.registerResident(request);
             return ResponseEntity.ok(new MessageResponse(
-                "Registration successful. Your account is pending approval."
+                "Registration successful."
             ));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new MessageResponse(e.getMessage()));
+        }
+    }
+    
+    /**
+     * User Login Endpoint
+     * 
+     * Validates email and password, returns user info on success
+     */
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginRequest request) {
+        try {
+            User user = authService.login(request);
+            
+            // Create response with user info (excluding password)
+            Map<String, Object> response = new HashMap<>();
+            response.put("id", user.getId());
+            response.put("email", user.getEmail());
+            response.put("firstName", user.getFirstName());
+            response.put("lastName", user.getLastName());
+            response.put("role", user.getRole());
+            response.put("message", "Login successful");
+            
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new MessageResponse(e.getMessage()));
         }
     }

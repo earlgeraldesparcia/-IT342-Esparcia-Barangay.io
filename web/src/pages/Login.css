@@ -4,7 +4,7 @@
   padding: 0;
 }
 
-.registration-container {
+.login-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -13,7 +13,7 @@
   padding: 24px;
 }
 
-.registration-card {
+.login-card {
   background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
@@ -22,54 +22,29 @@
   overflow: hidden;
 }
 
-.registration-header {
+.login-header {
   background-color: #1a73e8;
   padding: 32px 40px;
   text-align: center;
 }
 
-.registration-title {
+.login-title {
   font-size: 28px;
   font-weight: 600;
   color: #ffffff;
   margin-bottom: 8px;
 }
 
-.registration-subtitle {
+.login-subtitle {
   font-size: 15px;
   color: rgba(255, 255, 255, 0.9);
 }
 
-.registration-form {
+.login-form {
   padding: 32px 40px;
   display: flex;
   flex-direction: column;
-  gap: 28px;
-}
-
-.form-section {
-  display: flex;
-  flex-direction: column;
   gap: 20px;
-}
-
-.section-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.form-row {
-  display: flex;
-  gap: 16px;
-}
-
-.form-row .form-group {
-  flex: 1;
 }
 
 .form-group {
@@ -90,8 +65,7 @@
   color: #dc3545;
 }
 
-.form-group input,
-.form-group textarea {
+.form-group input {
   padding: 12px 16px;
   border: 1px solid #d0d0d0;
   border-radius: 6px;
@@ -99,30 +73,22 @@
   transition: all 0.2s;
   background-color: #fafafa;
   color: #333;
+  width: 100%;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
+.form-group input:focus {
   outline: none;
   border-color: #1a73e8;
   background-color: #ffffff;
 }
 
-.form-group input.error,
-.form-group textarea.error {
+.form-group input.error {
   border-color: #dc3545;
   background-color: #fff5f5;
 }
 
-.form-group input::placeholder,
-.form-group textarea::placeholder {
+.form-group input::placeholder {
   color: #999;
-}
-
-.form-group textarea {
-  resize: vertical;
-  font-family: inherit;
-  min-height: 80px;
 }
 
 .error-message {
@@ -188,7 +154,7 @@
   }
 }
 
-.login-link {
+.register-link {
   text-align: center;
   padding: 20px 40px;
   font-size: 14px;
@@ -197,100 +163,37 @@
   border-top: 1px solid #e0e0e0;
 }
 
-.login-link a {
+.register-link a {
   color: #1a73e8;
   text-decoration: none;
   font-weight: 500;
 }
 
-.login-link a:hover {
+.register-link a:hover {
   text-decoration: underline;
 }
 
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 20px;
-}
-
-.modal-content {
-  background-color: white;
-  padding: 40px;
-  border-radius: 12px;
-  max-width: 400px;
-  width: 100%;
-  text-align: center;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-}
-
-.modal-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
-}
-
-.modal-content h2 {
-  color: #1a73e8;
-  margin-bottom: 16px;
-  font-size: 22px;
-}
-
-.modal-content p {
-  color: #555;
-  margin-bottom: 28px;
-  line-height: 1.6;
-  font-size: 15px;
-}
-
-.modal-button {
-  background-color: #1a73e8;
-  color: white;
-  border: none;
-  padding: 12px 32px;
-  border-radius: 6px;
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.modal-button:hover {
-  background-color: #1557b0;
-}
-
-@media (max-width: 600px) {
-  .registration-container {
+@media (max-width: 480px) {
+  .login-container {
     padding: 0;
     background-color: #ffffff;
   }
   
-  .registration-card {
+  .login-card {
     box-shadow: none;
     border-radius: 0;
     max-width: 100%;
   }
   
-  .registration-header {
+  .login-header {
     padding: 24px 20px;
   }
   
-  .registration-form {
+  .login-form {
     padding: 24px 20px;
   }
   
-  .form-row {
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .login-link {
+  .register-link {
     padding: 20px;
   }
 }

@@ -73,7 +73,7 @@ function Login() {
         const data = await response.json();
         setErrors({ submit: data.message || 'Invalid email or password.' });
       }
-    } catch (error) {
+    } catch {
       setErrors({ submit: 'Network error. Please try again later.' });
     } finally {
       setIsSubmitting(false);
