@@ -20,49 +20,21 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
     
+    @Column(name = "password_hash", nullable = false)
+    private String passwordHash;
+    
     @Column(nullable = false)
-    private String password;
+    private String role = "resident";
     
-    @Column(name = "phone_number", nullable = false)
-    private String phoneNumber;
-    
-    @Column(nullable = false, length = 500)
-    private String address;
-    
-    @Column(name = "barangay_id", nullable = false, unique = true)
-    private String barangayId;
-    
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserRole role = UserRole.RESIDENT;
-    
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserStatus status = UserStatus.PENDING;
+    @Column(name = "auth_provider")
+    private String authProvider = "local";
     
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-    
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-    
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
-    
-    public enum UserRole {
-        RESIDENT, STAFF, ADMIN
-    }
-    
-    public enum UserStatus {
-        PENDING, APPROVED, REJECTED
     }
     
     public User() {}
@@ -100,52 +72,28 @@ public class User {
         this.email = email;
     }
     
-    public String getPassword() {
-        return password;
+    public String getPasswordHash() {
+        return passwordHash;
     }
     
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
     
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-    
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-    
-    public String getAddress() {
-        return address;
-    }
-    
-    public void setAddress(String address) {
-        this.address = address;
-    }
-    
-    public String getBarangayId() {
-        return barangayId;
-    }
-    
-    public void setBarangayId(String barangayId) {
-        this.barangayId = barangayId;
-    }
-    
-    public UserRole getRole() {
+    public String getRole() {
         return role;
     }
     
-    public void setRole(UserRole role) {
+    public void setRole(String role) {
         this.role = role;
     }
     
-    public UserStatus getStatus() {
-        return status;
+    public String getAuthProvider() {
+        return authProvider;
     }
     
-    public void setStatus(UserStatus status) {
-        this.status = status;
+    public void setAuthProvider(String authProvider) {
+        this.authProvider = authProvider;
     }
     
     public LocalDateTime getCreatedAt() {
@@ -154,13 +102,5 @@ public class User {
     
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-    
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-    
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

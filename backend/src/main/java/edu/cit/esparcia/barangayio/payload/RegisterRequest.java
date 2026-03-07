@@ -20,15 +20,6 @@ public class RegisterRequest {
     @Size(min = 8, message = "Password must be at least 8 characters long")
     private String password;
     
-    @NotBlank(message = "Phone number is required")
-    private String phoneNumber;
-    
-    @NotBlank(message = "Address is required")
-    private String address;
-    
-    @NotBlank(message = "Barangay ID is required")
-    private String barangayId;
-    
     public RegisterRequest() {}
     
     // Getters and Setters
@@ -62,29 +53,5 @@ public class RegisterRequest {
     
     public void setPassword(String password) {
         this.password = password;
-    }
-    
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-    
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-    
-    public String getAddress() {
-        return address;
-    }
-    
-    public void setAddress(String address) {
-        this.address = address;
-    }
-    
-    public String getBarangayId() {
-        return barangayId;
-    }
-    
-    public void setBarangayId(String barangayId) {
-        this.barangayId = barangayId;
     }
 }

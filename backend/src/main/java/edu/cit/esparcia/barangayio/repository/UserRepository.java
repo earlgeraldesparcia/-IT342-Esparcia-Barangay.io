@@ -15,17 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     
     /**
-     * Find user by Barangay ID
-     */
-    Optional<User> findByBarangayId(String barangayId);
-    
-    /**
      * Check if email already exists - prevents duplicate accounts
      */
     boolean existsByEmail(String email);
-    
-    /**
-     * Check if Barangay ID already exists - prevents duplicate accounts
-     */
-    boolean existsByBarangayId(String barangayId);
 }

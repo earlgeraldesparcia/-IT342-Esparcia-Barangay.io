@@ -40,11 +40,6 @@ public class AuthService {
             throw new RuntimeException("Email address is already registered");
         }
         
-        // Check for duplicate Barangay ID
-        if (userRepository.existsByBarangayId(request.getBarangayId())) {
-            throw new RuntimeException("Barangay ID is already registered");
-        }
-        
         // Create new user
         User user = new User();
         user.setFirstName(request.getFirstName());
@@ -54,13 +49,10 @@ public class AuthService {
         // Secure password storage using BCrypt
         // The password is hashed with a random salt before storage
         String encodedPassword = passwordEncoder.encode(request.getPassword());
-        user.setPassword(encodedPassword);
+        user.setPasswordHash(encodedPassword);
         
-        user.setPhoneNumber(request.getPhoneNumber());
-        user.setAddress(request.getAddress());
-        user.setBarangayId(request.getBarangayId());
-        user.setRole(User.UserRole.RESIDENT);
-        user.setStatus(User.UserStatus.PENDING); // Requires approval
+        user.setRole("resident");
+        user.setAuthProvider("local");
         
         return userRepository.save(user);
     }

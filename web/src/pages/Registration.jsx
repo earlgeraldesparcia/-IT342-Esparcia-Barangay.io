@@ -9,15 +9,12 @@ function Registration() {
     lastName: '',
     email: '',
     password: '',
-    confirmPassword: '',
-    phoneNumber: '',
-    address: '',
-    barangayId: ''
+    confirmPassword: ''
   });
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showPendingModal, setShowPendingModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const validateForm = () => {
     const newErrors = {};
@@ -44,18 +41,6 @@ function Registration() {
     
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
-    }
-    
-    if (!formData.phoneNumber.trim()) {
-      newErrors.phoneNumber = 'Phone number is required';
-    }
-    
-    if (!formData.address.trim()) {
-      newErrors.address = 'Address is required';
-    }
-    
-    if (!formData.barangayId.trim()) {
-      newErrors.barangayId = 'Barangay ID is required';
     }
     
     setErrors(newErrors);
@@ -95,15 +80,12 @@ function Registration() {
           firstName: formData.firstName,
           lastName: formData.lastName,
           email: formData.email,
-          password: formData.password,
-          phoneNumber: formData.phoneNumber,
-          address: formData.address,
-          barangayId: formData.barangayId
+          password: formData.password
         }),
       });
       
       if (response.ok) {
-        setShowPendingModal(true);
+        setShowSuccessModal(true);
       } else {
         const data = await response.json();
         setErrors({ submit: data.message || 'Registration failed. Please try again.' });
@@ -120,7 +102,7 @@ function Registration() {
       <div className="registration-card">
         <div className="registration-header">
           <h1 className="registration-title">Barangay.io</h1>
-          <p className="registration-subtitle">Create your resident account</p>
+          <p className="registration-subtitle">Create your account</p>
         </div>
         
         <form onSubmit={handleSubmit} className="registration-form">
@@ -169,20 +151,6 @@ function Registration() {
               />
               {errors.email && <span className="error-message">{errors.email}</span>}
             </div>
-            
-            <div className="form-group">
-              <label htmlFor="phoneNumber">Phone Number <span className="required">*</span></label>
-              <input
-                type="tel"
-                id="phoneNumber"
-                name="phoneNumber"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-                placeholder="+63 912 345 6789"
-                className={errors.phoneNumber ? 'error' : ''}
-              />
-              {errors.phoneNumber && <span className="error-message">{errors.phoneNumber}</span>}
-            </div>
           </div>
           
           <div className="form-section">
@@ -218,37 +186,6 @@ function Registration() {
             </div>
           </div>
           
-          <div className="form-section">
-            <h3 className="section-title">Residence Information</h3>
-            <div className="form-group">
-              <label htmlFor="address">Address <span className="required">*</span></label>
-              <textarea
-                id="address"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                placeholder="Enter your complete address"
-                rows="3"
-                className={errors.address ? 'error' : ''}
-              />
-              {errors.address && <span className="error-message">{errors.address}</span>}
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="barangayId">Barangay ID <span className="required">*</span></label>
-              <input
-                type="text"
-                id="barangayId"
-                name="barangayId"
-                value={formData.barangayId}
-                onChange={handleChange}
-                placeholder="Enter your Barangay ID number"
-                className={errors.barangayId ? 'error' : ''}
-              />
-              {errors.barangayId && <span className="error-message">{errors.barangayId}</span>}
-            </div>
-          </div>
-          
           {errors.submit && <div className="error-banner">{errors.submit}</div>}
           
           <button 
@@ -270,12 +207,12 @@ function Registration() {
         </p>
       </div>
       
-      {showPendingModal && (
+      {showSuccessModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <div className="modal-icon">⏳</div>
-            <h2>Registration Submitted</h2>
-            <p>Your account is currently under review. You will receive an email notification once your registration has been approved.</p>
+            <div className="modal-icon">✓</div>
+            <h2>Registration Successful</h2>
+            <p>Your account has been created successfully.</p>
             <button 
               className="modal-button"
               onClick={() => navigate('/login')}
