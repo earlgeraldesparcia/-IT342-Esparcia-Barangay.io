@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
+import GoogleLoginButton from '../components/GoogleLoginButton';
 
 function Login() {
   const navigate = useNavigate();
@@ -80,6 +81,36 @@ function Login() {
     }
   };
 
+  const handleGoogleLogin = async (googleData) => {
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch('http://localhost:8080/api/auth/google', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          idToken: googleData.credential
+        }),
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        // Store token or user info in localStorage/sessionStorage
+        localStorage.setItem('token', data.token);
+        navigate('/dashboard');
+      } else {
+        const data = await response.json();
+        setErrors({ submit: data.message || 'Google login failed.' });
+      }
+    } catch {
+      setErrors({ submit: 'Network error. Please try again later.' });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="login-container">
       <div className="login-card">
@@ -131,6 +162,12 @@ function Login() {
               </>
             ) : 'Sign In'}
           </button>
+          
+          <div className="divider">
+            <span>OR</span>
+          </div>
+          
+          <GoogleLoginButton onSuccess={handleGoogleLogin} />
         </form>
         
         <p className="register-link">

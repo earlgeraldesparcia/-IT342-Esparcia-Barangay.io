@@ -5,6 +5,8 @@ import edu.cit.esparcia.barangayio.payload.LoginRequest;
 import edu.cit.esparcia.barangayio.payload.MessageResponse;
 import edu.cit.esparcia.barangayio.payload.RegisterRequest;
 import edu.cit.esparcia.barangayio.service.AuthService;
+import edu.cit.esparcia.barangayio.service.GoogleOAuthService;
+import edu.cit.esparcia.barangayio.util.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,10 +22,14 @@ import java.util.Map;
 public class AuthController {
     
     private final AuthService authService;
+    private final GoogleOAuthService googleOAuthService;
+    private final JwtUtil jwtUtil;
     
     @Autowired
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, GoogleOAuthService googleOAuthService, JwtUtil jwtUtil) {
         this.authService = authService;
+        this.googleOAuthService = googleOAuthService;
+        this.jwtUtil = jwtUtil;
     }
     
     /**
@@ -69,16 +75,20 @@ public class AuthController {
     /**
      * User Login Endpoint
      * 
-     * Validates email and password, returns user info on success
+     * Validates email and password, returns JWT token on success
      */
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@Valid @RequestBody LoginRequest request) {
         try {
             User user = authService.login(request);
             
-            // Create response with user info (excluding password)
+            // Generate JWT token
+            String jwt = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole());
+            
+            // Create response with user info and token
             Map<String, Object> response = new HashMap<>();
-            response.put("id", user.getId());
+            response.put("token", jwt);
+            response.put("userId", user.getId());
             response.put("email", user.getEmail());
             response.put("firstName", user.getFirstName());
             response.put("lastName", user.getLastName());
@@ -86,6 +96,28 @@ public class AuthController {
             response.put("message", "Login successful");
             
             return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new MessageResponse(e.getMessage()));
+        }
+    }
+    
+    /**
+     * Google OAuth Login Endpoint
+     * 
+     * Receives Google ID token, verifies it, creates/updates user, returns JWT
+     */
+    @PostMapping("/google")
+    public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> request) {
+        try {
+            String idToken = request.get("idToken");
+            if (idToken == null || idToken.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new MessageResponse("ID token is required"));
+            }
+            
+            Map<String, Object> result = googleOAuthService.processGoogleLogin(idToken);
+            return ResponseEntity.ok(result);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new MessageResponse(e.getMessage()));

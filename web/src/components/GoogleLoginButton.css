@@ -1,0 +1,9 @@
+.google-login-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.google-login-button {
+  width: 100%;
+}
