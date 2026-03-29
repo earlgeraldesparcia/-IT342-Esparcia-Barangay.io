@@ -1,0 +1,42 @@
+[
+    {
+        "merged": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-merged_res-33:\\layout_register.xml.flat",
+        "source": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-main-35:\\layout\\register.xml"
+    },
+    {
+        "merged": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-merged_res-33:\\layout_activity_home.xml.flat",
+        "source": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-main-35:\\layout\\activity_home.xml"
+    },
+    {
+        "merged": "edu.cit.esparcia.barangayio.mobile.app-merged_res-33:/layout_register.xml.flat",
+        "source": "edu.cit.esparcia.barangayio.mobile.app-main-35:/layout/register.xml"
+    },
+    {
+        "merged": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-merged_res-33:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-main-35:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-merged_res-33:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-main-35:\\mipmap-anydpi-v26\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-merged_res-33:\\drawable_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-main-35:\\drawable\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-merged_res-33:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-main-35:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-merged_res-33:\\drawable_barangayio_logo.png.flat",
+        "source": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-main-35:\\drawable\\barangayio_logo.png"
+    },
+    {
+        "merged": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-merged_res-33:\\layout_login.xml.flat",
+        "source": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-main-35:\\layout\\login.xml"
+    },
+    {
+        "merged": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-merged_res-33:\\drawable_barangyio_logo.png.flat",
+        "source": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-main-35:\\drawable\\barangyio_logo.png"
+    }
+]

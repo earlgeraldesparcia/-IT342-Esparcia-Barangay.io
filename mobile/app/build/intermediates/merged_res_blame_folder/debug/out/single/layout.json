@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-mergeDebugResources-32:\\layout\\register.xml",
+        "source": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-main-35:\\layout\\register.xml"
+    },
+    {
+        "merged": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-mergeDebugResources-32:\\layout\\activity_main.xml",
+        "source": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-main-35:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "edu.cit.esparcia.barangayio.mobile.app-mergeDebugResources-32:/layout/register.xml",
+        "source": "edu.cit.esparcia.barangayio.mobile.app-main-35:/layout/register.xml"
+    },
+    {
+        "merged": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-mergeDebugResources-32:\\layout\\activity_home.xml",
+        "source": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-main-35:\\layout\\activity_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-mergeDebugResources-32:\\layout\\login.xml",
+        "source": "C:\\Users\\earlg\\.gradle\\daemon\\9.0-milestone-1\\edu.cit.esparcia.barangayio.mobile.app-main-35:\\layout\\login.xml"
+    }
+]
