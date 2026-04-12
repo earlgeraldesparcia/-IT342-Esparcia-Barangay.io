@@ -18,7 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174"})
 public class AuthController {
     
     private final AuthService authService;
@@ -83,7 +83,7 @@ public class AuthController {
             User user = authService.login(request);
             
             // Generate JWT token
-            String jwt = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole());
+            String jwt = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole(), user.getFirstName());
             
             // Create response with user info and token
             Map<String, Object> response = new HashMap<>();

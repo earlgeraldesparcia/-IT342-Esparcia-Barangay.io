@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { homePathForRole, persistAuthFromLogin } from '../utils/authDisplay';
 import './Login.css';
 import GoogleLoginButton from '../components/GoogleLoginButton';
 
@@ -67,9 +68,8 @@ function Login() {
       
       if (response.ok) {
         const data = await response.json();
-        // Store token or user info in localStorage/sessionStorage
-        localStorage.setItem('token', data.token);
-        navigate('/dashboard');
+        const role = persistAuthFromLogin(data);
+        navigate(homePathForRole(role));
       } else {
         const data = await response.json();
         setErrors({ submit: data.message || 'Invalid email or password.' });
@@ -97,9 +97,8 @@ function Login() {
       
       if (response.ok) {
         const data = await response.json();
-        // Store token or user info in localStorage/sessionStorage
-        localStorage.setItem('token', data.token);
-        navigate('/dashboard');
+        const role = persistAuthFromLogin(data);
+        navigate(homePathForRole(role));
       } else {
         const data = await response.json();
         setErrors({ submit: data.message || 'Google login failed.' });

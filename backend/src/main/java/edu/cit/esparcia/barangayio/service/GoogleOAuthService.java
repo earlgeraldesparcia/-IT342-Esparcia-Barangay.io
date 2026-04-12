@@ -85,7 +85,7 @@ public class GoogleOAuthService {
         }
         
         // Generate JWT
-        String jwt = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole());
+        String jwt = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole(), user.getFirstName());
         
         return Map.of(
             "token", jwt,

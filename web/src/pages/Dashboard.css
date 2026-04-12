@@ -1,13 +1,1190 @@
-.dashboard-container {
+/* Barangay.io dashboard shell — visual patterns adapted from BOACMS (MIT-style course project UI):
+   https://github.com/adamxparx/CSIT327-G2-BOACMS */
+
+.dashboard-page {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+:root {
+  --boacms-primary: #003da5;
+  --boacms-primary-dark: #002d85;
+  --boacms-secondary: #0052cc;
+  --boacms-hero: #0f4c9a;
+  --boacms-gray-50: #f8fafc;
+  --boacms-gray-100: #f1f5f9;
+  --boacms-gray-200: #e2e8f0;
+  --boacms-gray-400: #94a3b8;
+  --boacms-gray-600: #475569;
+  --boacms-gray-800: #1e293b;
+  --boacms-gray-900: #0f172a;
+}
+
+/* ——— Top navbar (base_dashboard + dashboard.css) ——— */
+.dashboard-navbar {
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.d-nav-logo-fallback {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--boacms-primary), var(--boacms-secondary));
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ffffff;
+  flex-shrink: 0;
 }
 
-.dashboard-title {
-  font-size: 48px;
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--boacms-primary);
+  line-height: 1.2;
+}
+
+.brand-subtitle {
+  font-size: 0.75rem;
+  color: var(--boacms-gray-600);
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.d-role-pill {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+}
+
+.d-role-pill--resident {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.d-role-pill--admin {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.d-nav-logo-fallback--admin {
+  background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+}
+
+.nav-menu {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.d-appbar-link {
+  padding: 0.75rem 1.25rem;
+  color: var(--boacms-gray-800);
+  text-decoration: none;
   font-weight: 600;
-  color: #333;
+  font-size: 0.875rem;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.d-appbar-link:hover {
+  background: var(--boacms-gray-100);
+  color: var(--boacms-primary);
+}
+
+.d-appbar-link.active {
+  background: var(--boacms-primary);
+  color: #fff;
+}
+
+.d-navbar-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.d-navbar-search {
+  width: 180px;
+  max-width: 40vw;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--boacms-gray-200);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-family: inherit;
+  background: var(--boacms-gray-50);
+}
+
+.d-navbar-search:focus {
+  outline: none;
+  border-color: var(--boacms-primary);
+  background: #fff;
+}
+
+.user-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.d-user-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.d-user-trigger:hover {
+  background: var(--boacms-gray-100);
+  border-color: var(--boacms-gray-200);
+}
+
+.user-info {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--boacms-gray-800);
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-menu-icon {
+  flex-shrink: 0;
+  color: var(--boacms-gray-600);
+}
+
+.dashboard-user-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 160px;
+  padding: 6px 0;
+  background: #fff;
+  border: 1px solid var(--boacms-gray-200);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  z-index: 50;
+}
+
+.dashboard-menu-item {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 14px;
+  color: #334155;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.dashboard-menu-item:hover {
+  background: var(--boacms-gray-100);
+}
+
+/* Main column */
+.main-content {
+  flex: 1;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.dashboard-footer {
+  background: #fff;
+  padding: 1.25rem;
+  text-align: center;
+  color: var(--boacms-gray-600);
+  font-size: 0.875rem;
+  border-top: 1px solid var(--boacms-gray-200);
+}
+
+/* ——— Resident dashboard home (dashboard.html + dashboard.css) ——— */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.hero-banner {
+  background: var(--boacms-hero);
+  border-radius: 16px;
+  padding: 2rem 2.25rem;
+  color: #fff;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.hero-greeting {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hero-greeting h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0;
+  color: #fff;
+}
+
+.sparkle-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  stroke: #4ade80;
+}
+
+.office-hours-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.office-hours-badge svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.section-header svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--boacms-gray-600);
+  flex-shrink: 0;
+}
+
+.section-header h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--boacms-gray-900);
+  margin: 0;
+}
+
+.appointment-card-inner {
+  background: var(--boacms-hero);
+  border-radius: 12px;
+  padding: 1.25rem;
+  color: #fff;
+}
+
+.appointment-date-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.appointment-date {
+  font-size: 0.875rem;
+  color: #4ade80;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-badge.confirmed {
+  background: #4ade80;
+  color: #0a2540;
+}
+
+.status-badge.completed {
+  background: #4ade80;
+  color: #0a2540;
+}
+
+.appointment-session {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.appointment-details .detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.detail-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+}
+
+.detail-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.location-value {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.location-value svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  stroke: currentColor;
+}
+
+.view-all-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #93c5fd;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+.view-all-link:hover {
+  text-decoration: underline;
+}
+
+.no-appointment,
+.no-requests {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--boacms-gray-600);
+}
+
+.book-now-link {
+  color: var(--boacms-primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.book-now-link:hover {
+  text-decoration: underline;
+}
+
+.request-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--boacms-gray-50);
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+}
+
+.request-item:last-of-type {
+  margin-bottom: 0;
+}
+
+.request-icon {
+  width: 40px;
+  height: 40px;
+  background: #e0f2fe;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.request-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: #0284c7;
+}
+
+.request-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.request-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--boacms-gray-900);
+}
+
+.request-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.request-date {
+  font-size: 0.8rem;
+  color: var(--boacms-gray-600);
+}
+
+.right-column {
+  position: sticky;
+  top: 88px;
+}
+
+.services-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.services-card h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--boacms-gray-900);
+  margin: 0 0 1rem;
+}
+
+.services-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.service-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem;
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.2s;
+}
+
+.service-item:hover {
+  background: var(--boacms-gray-50);
+}
+
+.service-icon {
+  width: 40px;
+  height: 40px;
+  background: #e0f2fe;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.service-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: #0284c7;
+}
+
+.service-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.service-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--boacms-gray-900);
+}
+
+.service-link {
+  font-size: 0.75rem;
+  color: #0284c7;
+}
+
+.arrow-icon {
+  width: 20px;
+  height: 20px;
+  stroke: var(--boacms-gray-400);
+  flex-shrink: 0;
+}
+
+.book-appointment-btn {
+  display: block;
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--boacms-hero);
+  color: #fff;
+  text-align: center;
+  border-radius: 24px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+
+.book-appointment-btn:hover {
+  background: #0a3d7a;
+}
+
+.resources-section h2 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--boacms-gray-900);
+  margin-bottom: 1rem;
+}
+
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.resource-card {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.resource-card h3 {
+  font-size: 1.05rem;
+  color: var(--boacms-gray-900);
+  margin-bottom: 0.75rem;
+}
+
+.resource-card p {
+  color: var(--boacms-gray-600);
+  font-size: 0.875rem;
+  margin-bottom: 0.35rem;
+  line-height: 1.5;
+}
+
+.resource-card.no-highlight:hover {
+  transform: none;
+}
+
+/* ——— Staff-style appointments (staff_dashboard.css, prefixed) ——— */
+.appt-mgmt {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.appt-mgmt-header {
+  background: linear-gradient(135deg, var(--boacms-primary) 0%, var(--boacms-secondary) 100%);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  color: #fff;
+}
+
+.appt-mgmt-header-left h1 {
+  font-size: 1.65rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.appt-mgmt-header-left h1 svg {
+  flex-shrink: 0;
+  stroke: currentColor;
+}
+
+.appt-meta-row {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.appt-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  opacity: 0.95;
+}
+
+.appt-meta-item svg {
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+.appt-date-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 0.5rem;
+  border-radius: 12px;
+}
+
+.appt-date-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.25rem;
+  line-height: 1;
+  transition: background 0.2s;
+}
+
+.appt-date-btn:hover {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.appt-date-label {
+  min-width: 160px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.appt-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.appt-stat-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.75rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.appt-stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.appt-stat-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.appt-stat-blue .appt-stat-icon {
+  background: #5b9bd5;
+}
+
+.appt-stat-green .appt-stat-icon {
+  background: #10b981;
+}
+
+.appt-stat-orange .appt-stat-icon {
+  background: #f59e0b;
+}
+
+.appt-stat-icon svg {
+  stroke: currentColor;
+}
+
+.appt-stat-label {
+  font-size: 0.9rem;
+  color: var(--boacms-gray-600);
+  margin: 0 0 0.35rem;
+  font-weight: 500;
+}
+
+.appt-stat-value {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--boacms-primary);
+  margin: 0;
+}
+
+.appt-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.appt-session-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.appt-session-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--boacms-gray-100);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.appt-session-title {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.appt-session-title svg {
+  stroke: var(--boacms-primary);
+  flex-shrink: 0;
+}
+
+.appt-session-title h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--boacms-gray-900);
+  margin: 0;
+}
+
+.appt-session-badge {
+  background: #5b9bd5;
+  color: #fff;
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.appt-mgmt-card {
+  border: 1px solid var(--boacms-gray-200);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.appt-mgmt-card:last-child {
+  margin-bottom: 0;
+}
+
+.appt-mgmt-card:hover {
+  border-color: var(--boacms-primary);
+  box-shadow: 0 4px 12px rgba(0, 61, 165, 0.1);
+}
+
+.appt-mgmt-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.appt-resident-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.appt-resident-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #e0f2fe;
+  color: var(--boacms-primary);
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.appt-resident-row h4 {
+  margin: 0 0 0.2rem;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--boacms-primary);
+}
+
+.appt-time {
+  font-size: 0.85rem;
+  color: var(--boacms-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 500;
+}
+
+.appt-time svg {
+  stroke: currentColor;
+}
+
+.appt-status-pill {
+  padding: 0.4rem 0.95rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: #5b9bd5;
+  color: #fff;
+}
+
+.appt-mgmt-card-body {
+  margin-bottom: 0.75rem;
+}
+
+.appt-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.appt-detail-cell {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  background: #f8fafb;
+  padding: 0.75rem;
+  border-radius: 8px;
+}
+
+.appt-detail-cell svg {
+  stroke: var(--boacms-primary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.appt-detail-lbl {
+  display: block;
+  font-weight: 600;
+  color: var(--boacms-gray-600);
+  font-size: 0.68rem;
+  margin-bottom: 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.appt-detail-val {
+  color: var(--boacms-primary);
+  font-weight: 600;
+}
+
+.appt-contact-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.78rem;
+  color: var(--boacms-gray-600);
+}
+
+.appt-contact-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex: 1;
+  min-width: 140px;
+}
+
+.appt-contact-item svg {
+  stroke: var(--boacms-primary);
+  flex-shrink: 0;
+}
+
+.appt-mgmt-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--boacms-gray-200);
+}
+
+.appt-btn {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.appt-btn-outline {
+  background: #fff;
+  color: #ef4444;
+  border: 2px solid #ef4444;
+}
+
+.appt-btn-outline:hover {
+  background: #fee2e2;
+}
+
+.appt-btn-primary {
+  background: var(--boacms-primary);
+  color: #fff;
+  border: none;
+}
+
+.appt-btn-primary:hover {
+  background: #002d7a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 61, 165, 0.25);
+}
+
+.appt-empty-state {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--boacms-gray-600);
+}
+
+.appt-empty-state svg {
+  width: 40px;
+  height: 40px;
+  stroke: var(--boacms-gray-400);
+  margin-bottom: 0.75rem;
+}
+
+.appt-mgmt-footnote {
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--boacms-gray-600);
+  text-align: center;
+}
+
+/* ——— Responsive ——— */
+@media (max-width: 1024px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .right-column {
+    position: static;
+  }
+
+  .appt-two-col {
+    grid-template-columns: 1fr;
+  }
+
+  .appt-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-menu {
+    order: 3;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .d-navbar-search {
+    width: 120px;
+  }
+
+  .hero-banner {
+    padding: 1.5rem;
+  }
+
+  .hero-greeting h1 {
+    font-size: 1.25rem;
+  }
+
+  .appt-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .appt-mgmt-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .appt-date-nav {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* Admin overview + resident appointments (role-specific) */
+.admin-home {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.admin-home-hero.appt-mgmt-header {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.admin-home-lead {
+  margin: 0;
+  max-width: 42rem;
+  line-height: 1.55;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.admin-home-link {
+  color: #bfdbfe;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.admin-home-link:hover {
+  color: #fff;
+}
+
+.admin-home-panel {
+  margin-top: 0.5rem;
+}
+
+.admin-home-panel-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+  color: var(--boacms-gray-900);
+}
+
+.admin-home-panel-text {
+  margin: 0 0 1.25rem;
+  color: var(--boacms-gray-600);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.admin-home-cta {
+  max-width: 320px;
+}
+
+.resident-appt-page .resident-appt-hero {
+  padding: 0;
+  overflow: hidden;
+}
+
+.resident-appt-hero-inner {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  padding: 0.25rem 0;
+}
+
+.resident-appt-illus {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  stroke: var(--boacms-primary);
+  opacity: 0.9;
+}
+
+.resident-appt-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--boacms-gray-900);
+}
+
+.resident-appt-desc {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+  color: var(--boacms-gray-600);
+  line-height: 1.5;
+}
+
+.resident-appt-sub {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--boacms-gray-900);
 }
