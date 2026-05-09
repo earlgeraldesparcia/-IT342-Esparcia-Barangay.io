@@ -12,6 +12,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -32,9 +37,9 @@ public class AppointmentController {
         return ResponseEntity.ok(appointments);
     }
 
-    @GetMapping("/resident/{residentId}")
-    public ResponseEntity<List<Appointment>> getResidentAppointments(@PathVariable UUID residentId) {
-        List<Appointment> appointments = appointmentService.getResidentAppointments(residentId);
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Appointment>> getUserAppointments(@PathVariable UUID userId) {
+        List<Appointment> appointments = appointmentService.getUserAppointments(userId);
         return ResponseEntity.ok(appointments);
     }
 
@@ -97,10 +102,10 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createAppointment(@RequestBody CreateAppointmentRequest request) {
+    public ResponseEntity<?> createAppointment(@jakarta.validation.Valid @RequestBody CreateAppointmentRequest request) {
         try {
             Appointment appointment = new Appointment();
-            appointment.setResidentId(request.getResidentId());
+            appointment.setUserId(request.getUserId());
             appointment.setCertificateType(request.getCertificateType());
             appointment.setAppointmentDate(request.getPreferredDate());
             appointment.setAppointmentTime(request.getPreferredTime());
@@ -112,6 +117,40 @@ public class AppointmentController {
         } catch (IllegalArgumentException e) {
             ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), "VALIDATION_ERROR");
             return ResponseEntity.badRequest().body(errorResponse);
+        }
+    }
+
+    @PostMapping("/{id}/upload-id")
+    public ResponseEntity<?> uploadIdFile(@PathVariable UUID id, @RequestParam("file") MultipartFile file) {
+        try {
+            Appointment appointment = appointmentService.getAppointmentById(id);
+            if (appointment == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Appointment not found", "NOT_FOUND"));
+            }
+
+            // Create uploads directory if it doesn't exist
+            Path uploadDir = Paths.get("uploads");
+            if (!Files.exists(uploadDir)) {
+                Files.createDirectories(uploadDir);
+            }
+
+            // Generate unique filename
+            String originalFilename = file.getOriginalFilename();
+            String fileExtension = originalFilename != null ? originalFilename.substring(originalFilename.lastIndexOf(".")) : "";
+            String uniqueFilename = id.toString() + "_" + System.currentTimeMillis() + fileExtension;
+            Path filePath = uploadDir.resolve(uniqueFilename);
+
+            // Save file
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            // Update appointment
+            appointment.setAttachmentPath(filePath.toString());
+            appointmentService.updateAppointment(id, appointment);
+
+            return ResponseEntity.ok(appointment);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse("Failed to upload file: " + e.getMessage(), "UPLOAD_ERROR"));
         }
     }
 

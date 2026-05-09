@@ -75,12 +75,6 @@ export default function ResidentDashboardLayout() {
           </div>
 
           <div className="d-navbar-tools">
-            <input
-              type="search"
-              className="d-navbar-search"
-              placeholder="Search…"
-              aria-label="Search"
-            />
             <div className="user-menu" ref={menuRef}>
               <button
                 type="button"
@@ -120,7 +114,7 @@ export default function ResidentDashboardLayout() {
       </main>
 
       <footer className="dashboard-footer">
-        <p>© {new Date().getFullYear()} Barangay.io — Resident services (layout inspired by BOACMS).</p>
+        <p>© {new Date().getFullYear()} Barangay.io</p>
       </footer>
     </div>
   );

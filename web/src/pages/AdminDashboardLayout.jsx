@@ -74,12 +74,6 @@ export default function AdminDashboardLayout() {
           </div>
 
           <div className="d-navbar-tools">
-            <input
-              type="search"
-              className="d-navbar-search"
-              placeholder="Search…"
-              aria-label="Search"
-            />
             <div className="user-menu" ref={menuRef}>
               <button
                 type="button"
@@ -119,7 +113,7 @@ export default function AdminDashboardLayout() {
       </main>
 
       <footer className="dashboard-footer">
-        <p>© {new Date().getFullYear()} Barangay.io — Admin / staff tools (layout inspired by BOACMS).</p>
+        <p>© {new Date().getFullYear()} Barangay.io</p>
       </footer>
     </div>
   );

@@ -67,6 +67,15 @@ export function homePathForRole(role) {
   return role === 'admin' ? '/admin/dashboard' : '/resident/dashboard';
 }
 
+export function getUserId() {
+  const token = localStorage.getItem('token');
+  if (token) {
+    const payload = decodeJwtPayload(token);
+    return payload?.userId || null;
+  }
+  return null;
+}
+
 /**
  * Resolves the user's first name for UI: JWT claim (preferred), then localStorage from login.
  */

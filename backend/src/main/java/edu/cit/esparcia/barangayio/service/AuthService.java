@@ -16,11 +16,13 @@ public class AuthService {
     
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
     
     @Autowired
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
     
     /**
@@ -59,7 +61,12 @@ public class AuthService {
         user.setRole("resident");
         user.setAuthProvider("local");
         
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        
+        // Send Welcome Email
+        emailService.sendWelcomeEmail(savedUser.getEmail(), savedUser.getFirstName());
+        
+        return savedUser;
     }
     
     /**

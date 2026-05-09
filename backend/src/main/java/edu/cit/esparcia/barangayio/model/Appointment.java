@@ -14,8 +14,8 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     
-    @Column(name = "resident_id", nullable = false)
-    private UUID residentId;
+    @Column(name = "user_id", nullable = false)
+    private UUID userId;
     
     @Enumerated(EnumType.STRING)
     @Column(name = "certificate_type", nullable = false)
@@ -36,7 +36,7 @@ public class Appointment {
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private AppointmentStatus status = AppointmentStatus.PENDING;
+    private AppointmentStatus status = AppointmentStatus.APPROVED;
     
     @Column(name = "cancellation_reason")
     private String cancellationReason;
@@ -53,6 +53,9 @@ public class Appointment {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
     
+    @Column(name = "attachment_path")
+    private String attachmentPath;
+    
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -67,14 +70,14 @@ public class Appointment {
     // Constructors
     public Appointment() {}
     
-    public Appointment(UUID residentId, CertificateTypeEnum certificateType, LocalDate appointmentDate, 
+    public Appointment(UUID userId, CertificateTypeEnum certificateType, LocalDate appointmentDate, 
                    LocalTime appointmentTime, PurposeEnum purpose, AppointmentStatus status, String specifyPurpose) {
-        this.residentId = residentId;
+        this.userId = userId;
         this.certificateType = certificateType;
         this.appointmentDate = appointmentDate;
         this.appointmentTime = appointmentTime;
         this.purpose = purpose;
-        this.status = status != null ? status : AppointmentStatus.PENDING;
+        this.status = status != null ? status : AppointmentStatus.APPROVED;
         this.specifyPurpose = specifyPurpose;
     }
     
@@ -87,12 +90,12 @@ public class Appointment {
         this.id = id;
     }
     
-    public UUID getResidentId() {
-        return residentId;
+    public UUID getUserId() {
+        return userId;
     }
     
-    public void setResidentId(UUID residentId) {
-        this.residentId = residentId;
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
     
     public CertificateTypeEnum getCertificateType() {
@@ -181,5 +184,13 @@ public class Appointment {
     
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+    
+    public String getAttachmentPath() {
+        return attachmentPath;
+    }
+    
+    public void setAttachmentPath(String attachmentPath) {
+        this.attachmentPath = attachmentPath;
     }
 }

@@ -28,25 +28,21 @@ public class CertificateTypeBootstrapRunner implements CommandLineRunner {
         log.info("Initializing certificate types...");
 
         CertificateType barangayClearance = new CertificateType();
-        barangayClearance.setId(1L);
         barangayClearance.setName("barangay_clearance");
         barangayClearance.setDescription("Barangay Clearance - A document certifying that a person is a resident of the barangay and has no derogatory record");
         certificateTypeRepository.save(barangayClearance);
 
         CertificateType certificateOfIndigency = new CertificateType();
-        certificateOfIndigency.setId(2L);
         certificateOfIndigency.setName("certificate_of_indigency");
         certificateOfIndigency.setDescription("Certificate of Indigency - A document certifying that a person belongs to a low-income family and has no regular source of income");
         certificateTypeRepository.save(certificateOfIndigency);
 
         CertificateType communityTaxCertificate = new CertificateType();
-        communityTaxCertificate.setId(3L);
         communityTaxCertificate.setName("community_tax_certificate");
         communityTaxCertificate.setDescription("Community Tax Certificate - A document certifying that a person has paid their community tax for the current year");
         certificateTypeRepository.save(communityTaxCertificate);
 
         CertificateType soloParentCertificate = new CertificateType();
-        soloParentCertificate.setId(4L);
         soloParentCertificate.setName("solo_parent_certificate");
         soloParentCertificate.setDescription("Solo Parent Certificate - A document certifying that a person is a solo parent and is entitled to benefits under the Solo Parents Welfare Act");
         certificateTypeRepository.save(soloParentCertificate);

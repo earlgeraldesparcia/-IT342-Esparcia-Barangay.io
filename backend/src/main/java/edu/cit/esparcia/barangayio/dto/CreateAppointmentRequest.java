@@ -2,7 +2,7 @@ package edu.cit.esparcia.barangayio.dto;
 
 import edu.cit.esparcia.barangayio.model.CertificateTypeEnum;
 import edu.cit.esparcia.barangayio.model.PurposeEnum;
-import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,14 +12,14 @@ import java.util.UUID;
 
 public class CreateAppointmentRequest {
 
-    @NotNull(message = "Resident ID is required")
-    private UUID residentId;
+    @NotNull(message = "User ID is required")
+    private UUID userId;
 
     @NotNull(message = "Certificate type is required")
     private CertificateTypeEnum certificateType;
 
     @NotNull(message = "Preferred date is required")
-    @Future(message = "Preferred date must be in the future")
+    @FutureOrPresent(message = "Preferred date must be in the future or present")
     private LocalDate preferredDate;
 
     @NotNull(message = "Preferred time is required")
@@ -33,10 +33,10 @@ public class CreateAppointmentRequest {
     // Constructors
     public CreateAppointmentRequest() {}
 
-    public CreateAppointmentRequest(UUID residentId, CertificateTypeEnum certificateType, 
+    public CreateAppointmentRequest(UUID userId, CertificateTypeEnum certificateType, 
                                LocalDate preferredDate, LocalTime preferredTime, 
                                PurposeEnum purpose, String specifyPurpose) {
-        this.residentId = residentId;
+        this.userId = userId;
         this.certificateType = certificateType;
         this.preferredDate = preferredDate;
         this.preferredTime = preferredTime;
@@ -45,12 +45,12 @@ public class CreateAppointmentRequest {
     }
 
     // Getters and Setters
-    public UUID getResidentId() {
-        return residentId;
+    public UUID getUserId() {
+        return userId;
     }
 
-    public void setResidentId(UUID residentId) {
-        this.residentId = residentId;
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public CertificateTypeEnum getCertificateType() {

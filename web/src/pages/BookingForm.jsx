@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { getUserId } from '../utils/authDisplay';
 import './BookingForm.css';
 
 function CalendarIcon() {
@@ -126,8 +127,30 @@ export default function BookingForm() {
 
   const selectDate = (date) => {
     setSelectedDate(date);
-    const formattedDate = date.toISOString().split('T')[0];
+    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     setFormData(prev => ({ ...prev, preferred_date: formattedDate }));
+    // Reset time if selected time is now in the past for today
+    if (formData.preferred_time && isTimeSlotPast(formData.preferred_time, date)) {
+      setFormData(prev => ({ ...prev, preferred_time: '' }));
+    }
+  };
+
+  const isTimeSlotPast = (slotValue, dateToCheck = selectedDate) => {
+    if (!dateToCheck) return false;
+    const today = new Date();
+    
+    // Check if selected date is today
+    if (dateToCheck.getFullYear() === today.getFullYear() && 
+        dateToCheck.getMonth() === today.getMonth() && 
+        dateToCheck.getDate() === today.getDate()) {
+        
+        const [hour, minute] = slotValue.split(':').map(Number);
+        
+        if (today.getHours() > hour || (today.getHours() === hour && today.getMinutes() >= minute)) {
+            return true;
+        }
+    }
+    return false;
   };
 
   const selectSession = (session) => {
@@ -191,8 +214,14 @@ export default function BookingForm() {
 
     try {
       // Map form data to backend API format
+      const userId = getUserId();
+      if (!userId) {
+        alert('User is not authenticated. Please log in again.');
+        setIsSubmitting(false);
+        return;
+      }
       const appointmentData = {
-        residentId: crypto.randomUUID(), // Generate a random UUID for now
+        userId: userId,
         certificateType: formData.certificate_type.toUpperCase(),
         preferredDate: formData.preferred_date,
         preferredTime: formData.preferred_time,
@@ -361,7 +390,7 @@ export default function BookingForm() {
                             type="button"
                             className={`time-slot ${formData.preferred_time === slot.value ? 'selected' : ''}`}
                             onClick={() => setFormData(prev => ({ ...prev, preferred_time: slot.value }))}
-                            disabled={!formData.preferred_date}
+                            disabled={!formData.preferred_date || isTimeSlotPast(slot.value)}
                           >
                             {slot.label}
                           </button>

@@ -22,13 +22,30 @@ public class AppointmentService {
 
     @Autowired
     private AppointmentRepository appointmentRepository;
+    
+    @Autowired
+    private edu.cit.esparcia.barangayio.repository.UserRepository userRepository;
+    
+    @Autowired
+    private EmailService emailService;
+
+    private void notifyUser(Appointment appointment, String status) {
+        userRepository.findById(appointment.getUserId()).ifPresent(user -> {
+            emailService.sendAppointmentNotification(
+                user.getEmail(), 
+                status, 
+                appointment.getAppointmentDate().toString(), 
+                appointment.getAppointmentTime().toString()
+            );
+        });
+    }
 
     public List<Appointment> getAllAppointments() {
         return appointmentRepository.findAll();
     }
 
-    public List<Appointment> getResidentAppointments(UUID residentId) {
-        return appointmentRepository.findByResidentIdOrderByAppointmentDateAsc(residentId);
+    public List<Appointment> getUserAppointments(UUID userId) {
+        return appointmentRepository.findByUserIdOrderByAppointmentDateAsc(userId);
     }
 
     public List<Appointment> getPendingAppointments() {
@@ -85,7 +102,7 @@ public class AppointmentService {
             throw new IllegalArgumentException("Please specify your purpose when selecting 'Others'");
         }
 
-        appointment.setStatus(AppointmentStatus.PENDING);
+        appointment.setStatus(AppointmentStatus.APPROVED);
         return appointmentRepository.save(appointment);
     }
 
@@ -118,7 +135,9 @@ public class AppointmentService {
             .orElseThrow(() -> new IllegalArgumentException("Appointment not found"));
         
         appointment.setStatus(AppointmentStatus.APPROVED);
-        return appointmentRepository.save(appointment);
+        Appointment saved = appointmentRepository.save(appointment);
+        notifyUser(saved, "APPROVED");
+        return saved;
     }
 
     public Appointment completeAppointment(UUID id) {
@@ -126,7 +145,9 @@ public class AppointmentService {
             .orElseThrow(() -> new IllegalArgumentException("Appointment not found"));
         
         appointment.setStatus(AppointmentStatus.COMPLETED);
-        return appointmentRepository.save(appointment);
+        Appointment saved = appointmentRepository.save(appointment);
+        notifyUser(saved, "COMPLETED");
+        return saved;
     }
 
     public Appointment claimAppointment(UUID id) {
@@ -138,7 +159,9 @@ public class AppointmentService {
         }
         
         appointment.setStatus(AppointmentStatus.CLAIMED);
-        return appointmentRepository.save(appointment);
+        Appointment saved = appointmentRepository.save(appointment);
+        notifyUser(saved, "CLAIMED");
+        return saved;
     }
 
     public Appointment cancelAppointment(UUID id, String cancellationReason) {
@@ -152,7 +175,9 @@ public class AppointmentService {
         
         appointment.setStatus(AppointmentStatus.CANCELLED);
         appointment.setCancellationReason(cancellationReason);
-        return appointmentRepository.save(appointment);
+        Appointment saved = appointmentRepository.save(appointment);
+        notifyUser(saved, "CANCELLED");
+        return saved;
     }
 
     public Appointment rescheduleAppointment(UUID id, LocalDate newDate, LocalTime newTime, String reason) {
@@ -192,7 +217,9 @@ public class AppointmentService {
         appointment.setRescheduleReason(reason);
         appointment.setRescheduledAt(LocalDateTime.now());
         
-        return appointmentRepository.save(appointment);
+        Appointment saved = appointmentRepository.save(appointment);
+        notifyUser(saved, "RESCHEDULED");
+        return saved;
     }
 
     public void deleteAppointment(UUID id) {

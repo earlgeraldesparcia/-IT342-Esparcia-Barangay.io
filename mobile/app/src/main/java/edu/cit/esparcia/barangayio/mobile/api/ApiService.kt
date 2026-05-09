@@ -20,7 +20,7 @@ data class LoginRequest(
 
 data class LoginResponse(
     val token: String,
-    val userId: Long,
+    val userId: String,
     val email: String,
     val firstName: String,
     val lastName: String,

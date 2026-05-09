@@ -15,13 +15,13 @@ import java.util.UUID;
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, UUID> {
     
-    List<Appointment> findByResidentId(UUID residentId);
+    List<Appointment> findByUserId(UUID userId);
     
-    List<Appointment> findByResidentIdOrderByAppointmentDateAsc(UUID residentId);
+    List<Appointment> findByUserIdOrderByAppointmentDateAsc(UUID userId);
     
     List<Appointment> findByStatus(AppointmentStatus status);
     
-    List<Appointment> findByResidentIdAndStatus(UUID residentId, AppointmentStatus status);
+    List<Appointment> findByUserIdAndStatus(UUID userId, AppointmentStatus status);
     
     @Query("SELECT a FROM Appointment a WHERE a.appointmentDate = :date AND a.status NOT IN :excludedStatuses")
     List<Appointment> findByDateAndStatusNotIn(@Param("date") LocalDate date, 

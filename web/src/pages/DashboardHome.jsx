@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { useMemo } from 'react';
-import { getDisplayFirstName } from '../utils/authDisplay';
+import { useMemo, useState, useEffect } from 'react';
+import { getDisplayFirstName, getUserId } from '../utils/authDisplay';
 
 function SparkleIcon() {
   return (
@@ -54,21 +54,60 @@ function ChevronRightIcon() {
   );
 }
 
-const MOCK_COMPLETED = [
-  { id: 1, name: 'Barangay Clearance', date: '2025-03-12', status: 'Completed' },
-  { id: 2, name: 'Community Tax Certificate', date: '2025-02-28', status: 'Completed' },
-];
-
 const SERVICES = [
-  { name: 'Barangay Clearance', sub: 'View requirements' },
-  { name: 'Certificate of Indigency', sub: 'View requirements' },
-  { name: 'Community Tax Certificate', sub: 'View requirements' },
-  { name: 'Solo Parent Certificate', sub: 'View requirements' },
+  { name: 'Barangay Clearance' },
+  { name: 'Certificate of Indigency' },
+  { name: 'Community Tax Certificate' },
+  { name: 'Solo Parent Certificate' },
 ];
 
 function DashboardHome() {
   const fullName = useMemo(() => getDisplayFirstName(), []);
-  const showNextAppointment = false;
+  const [upcomingAppointments, setUpcomingAppointments] = useState([]);
+  const [completedRequests, setCompletedRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchAppointments() {
+      const userId = getUserId();
+      if (!userId) {
+        setLoading(false);
+        return;
+      }
+      try {
+        const response = await fetch(`http://localhost:8080/api/appointments/user/${userId}`, {
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          const completed = data.filter(apt => apt.status === 'COMPLETED').slice(0, 5);
+          setCompletedRequests(completed.map(apt => ({
+            id: apt.id,
+            name: apt.certificateType.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase()),
+            date: apt.appointmentDate,
+            status: 'Completed'
+          })));
+
+          const upcoming = data.filter(apt => apt.status === 'PENDING' || apt.status === 'APPROVED');
+          upcoming.sort((a, b) => {
+            const dateA = new Date(a.appointmentDate + 'T' + a.appointmentTime);
+            const dateB = new Date(b.appointmentDate + 'T' + b.appointmentTime);
+            return dateA - dateB;
+          });
+          setUpcomingAppointments(upcoming);
+        }
+      } catch (error) {
+        console.error("Error fetching appointments:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchAppointments();
+  }, []);
 
   return (
     <div className="dashboard-container">
@@ -92,29 +131,37 @@ function DashboardHome() {
               <CalendarIcon />
               <h2>Next appointment</h2>
             </div>
-            {showNextAppointment ? (
-              <div className="appointment-card-inner">
-                <div className="appointment-date-row">
-                  <span className="appointment-date">Sample date</span>
-                  <span className="status-badge confirmed">Confirmed</span>
-                </div>
-                <div className="appointment-session">AM Session (8:00 AM – 12:00 PM)</div>
-                <div className="appointment-details">
-                  <div className="detail-item">
-                    <span className="detail-label">Certificate type</span>
-                    <span className="detail-value">Barangay Clearance</span>
+            {loading ? (
+              <div className="no-appointment"><p>Loading...</p></div>
+            ) : upcomingAppointments.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', paddingTop: '1rem' }}>
+                {upcomingAppointments.map((apt) => (
+                  <div key={apt.id} className="appointment-card-inner" style={{ marginTop: 0 }}>
+                    <div className="appointment-date-row">
+                      <span className="appointment-date">{apt.appointmentDate}</span>
+                      <span className={`status-badge ${apt.status.toLowerCase()}`}>{apt.status}</span>
+                    </div>
+                    <div className="appointment-session">Time: {apt.appointmentTime}</div>
+                    <div className="appointment-details">
+                      <div className="detail-item">
+                        <span className="detail-label">Certificate type</span>
+                        <span className="detail-value">{apt.certificateType.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase())}</span>
+                      </div>
+                      <div className="detail-item">
+                        <span className="detail-label">Location</span>
+                        <span className="detail-value location-value">
+                          <MapPinIcon />
+                          Barangay hall
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="detail-item">
-                    <span className="detail-label">Location</span>
-                    <span className="detail-value location-value">
-                      <MapPinIcon />
-                      Barangay hall (connect your data later)
-                    </span>
-                  </div>
+                ))}
+                <div style={{ padding: '0 1.5rem 1.5rem' }}>
+                  <Link to="/resident/appointments" className="view-all-link">
+                    View all appointments →
+                  </Link>
                 </div>
-                <Link to="/resident/appointments" className="view-all-link">
-                  View all appointments →
-                </Link>
               </div>
             ) : (
               <div className="no-appointment">
@@ -131,8 +178,10 @@ function DashboardHome() {
               <FileIcon />
               <h2>Completed requests</h2>
             </div>
-            {MOCK_COMPLETED.length ? (
-              MOCK_COMPLETED.map((row) => (
+            {loading ? (
+              <div className="no-requests">Loading...</div>
+            ) : completedRequests.length ? (
+              completedRequests.map((row) => (
                 <div key={row.id} className="request-item">
                   <div className="request-icon">
                     <FileIcon />
@@ -155,20 +204,13 @@ function DashboardHome() {
         <aside className="right-column">
           <div className="services-card">
             <h2>Barangay services</h2>
-            <div className="services-list">
+            <ul className="services-list" style={{ textAlign: 'left', paddingLeft: '1.5rem', marginBottom: '1.5rem', listStyleType: 'disc' }}>
               {SERVICES.map((s) => (
-                <Link key={s.name} to="/resident/book" className="service-item">
-                  <div className="service-icon">
-                    <FileIcon />
-                  </div>
-                  <div className="service-info">
-                    <span className="service-name">{s.name}</span>
-                    <span className="service-link">{s.sub}</span>
-                  </div>
-                  <ChevronRightIcon />
-                </Link>
+                <li key={s.name} style={{ color: 'var(--boacms-gray-800)', padding: '0.25rem 0', fontWeight: '500' }}>
+                  {s.name}
+                </li>
               ))}
-            </div>
+            </ul>
             <Link to="/resident/book" className="book-appointment-btn">
               Book appointment
             </Link>
@@ -181,9 +223,9 @@ function DashboardHome() {
         <div className="resources-grid">
           <div className="resource-card no-highlight">
             <h3>Barangay office</h3>
-            <p>Email: barangay.example@mail.gov</p>
-            <p>Phone: (032) 000-0000</p>
-            <p>Address: Your barangay address line</p>
+            <p>Email: apas@barangay.io</p>
+            <p>Phone: (032) 123-4567</p>
+            <p>Address: UCMA Village, Apas, Cebu City, Cebu 6000</p>
           </div>
         </div>
       </section>

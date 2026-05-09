@@ -6,8 +6,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    // IMPORTANT: Replace 'YOUR_LOCAL_IP_HERE' with your computer's actual IP address (e.g., 192.168.1.5)
-    private const val BASE_URL = "http://10.235.123.31:8080"
+    // Pointing directly to your local computer's IP where Spring Boot is running
+    private const val BASE_URL = "http://192.168.1.70:8080"
 
     private val logging = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY

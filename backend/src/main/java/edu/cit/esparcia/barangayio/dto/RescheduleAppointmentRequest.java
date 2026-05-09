@@ -1,6 +1,6 @@
 package edu.cit.esparcia.barangayio.dto;
 
-import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
@@ -8,7 +8,7 @@ import java.time.LocalTime;
 
 public class RescheduleAppointmentRequest {
 
-    @Future(message = "New date must be in the future")
+    @FutureOrPresent(message = "New date must be in the future or present")
     private LocalDate newDate;
     
     private LocalTime newTime;

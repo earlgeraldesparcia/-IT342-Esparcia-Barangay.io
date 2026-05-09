@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
     // Initialize auth state
     const initializeAuth = async () => {
       try {
-        const profile = await authService.getCurrentUserUserProfile()
+        const profile = await authService.getCurrentUserProfile()
         setUserProfile(profile)
         setUser(profile?.authUser || null)
       } catch (error) {
@@ -29,7 +29,7 @@ export function AuthProvider({ children }) {
       setUser(session?.user ?? null)
       
       if (session?.user) {
-        const profile = await authService.getCurrentUserUserProfile()
+        const profile = await authService.getCurrentUserProfile()
         setUserProfile(profile)
       } else {
         setUserProfile(null)

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 function IconCalendar() {
@@ -18,6 +19,15 @@ function IconInbox() {
   );
 }
 
+function IconCheck() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="22" height="22" aria-hidden="true">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+      <polyline points="22 4 12 14.01 9 11.01" />
+    </svg>
+  );
+}
+
 function IconUsers() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="22" height="22" aria-hidden="true">
@@ -29,6 +39,33 @@ function IconUsers() {
 }
 
 export default function AdminDashboardHome() {
+  const [stats, setStats] = useState({
+    scheduledToday: '—',
+    completedToday: '—',
+    registeredResidents: '—'
+  });
+
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        const response = await fetch('http://localhost:8080/api/stats/dashboard', {
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setStats(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch stats:', error);
+      }
+    }
+    fetchStats();
+  }, []);
+
   return (
     <div className="admin-home">
       <header className="appt-mgmt-header admin-home-hero">
@@ -37,38 +74,27 @@ export default function AdminDashboardHome() {
             <IconCalendar />
             Barangay operations
           </h1>
-          <p className="admin-home-lead">
-            Use the appointment desk to review schedules and resident visits—similar to the staff dashboard in{' '}
-            <a
-              className="admin-home-link"
-              href="https://github.com/adamxparx/CSIT327-G2-BOACMS"
-              target="_blank"
-              rel="noreferrer"
-            >
-              BOACMS
-            </a>
-            .
-          </p>
         </div>
       </header>
 
       <div className="appt-stats-grid">
-        <div className="appt-stat-card appt-stat-blue">
-          <div className="appt-stat-icon">
-            <IconInbox />
-          </div>
-          <div>
-            <p className="appt-stat-label">Pending approvals</p>
-            <h3 className="appt-stat-value">0</h3>
-          </div>
-        </div>
+
         <div className="appt-stat-card appt-stat-green">
           <div className="appt-stat-icon">
             <IconCalendar />
           </div>
           <div>
             <p className="appt-stat-label">Scheduled today</p>
-            <h3 className="appt-stat-value">—</h3>
+            <h3 className="appt-stat-value">{stats.scheduledToday}</h3>
+          </div>
+        </div>
+        <div className="appt-stat-card appt-stat-blue">
+          <div className="appt-stat-icon">
+            <IconCheck />
+          </div>
+          <div>
+            <p className="appt-stat-label">Completed today</p>
+            <h3 className="appt-stat-value">{stats.completedToday}</h3>
           </div>
         </div>
         <div className="appt-stat-card appt-stat-orange">
@@ -77,7 +103,7 @@ export default function AdminDashboardHome() {
           </div>
           <div>
             <p className="appt-stat-label">Registered residents</p>
-            <h3 className="appt-stat-value">—</h3>
+            <h3 className="appt-stat-value">{stats.registeredResidents}</h3>
           </div>
         </div>
       </div>
@@ -85,8 +111,7 @@ export default function AdminDashboardHome() {
       <section className="section-card admin-home-panel">
         <h2 className="admin-home-panel-title">Quick actions</h2>
         <p className="admin-home-panel-text">
-          Open the appointment desk for day-view sessions, resident cards, and action buttons (preview data until APIs are
-          connected).
+          Open the appointment desk for day-view sessions, resident cards, and action buttons.
         </p>
         <Link to="/admin/appointments" className="book-appointment-btn admin-home-cta">
           Go to appointment desk

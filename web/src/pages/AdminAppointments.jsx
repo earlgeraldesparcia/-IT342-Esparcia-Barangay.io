@@ -1,6 +1,5 @@
 import { useMemo, useState, useEffect } from 'react';
-import { appointmentService } from '../services/appointmentService';
-import { useAuth } from '../contexts/AuthContext';
+import { getStoredRole } from '../utils/authDisplay';
 
 function IconCalendar() {
   return (
@@ -110,27 +109,22 @@ function SessionCard({ title, count, children, emptyLabel }) {
 
 function AppointmentMgmtCard({ row, onStatusUpdate }) {
   const statusLabel =
-    row.status === 'claimed' ? 'Claimed - Awaiting confirmation' : 
+    row.status === 'claimed' ? 'Claimed' : 
     row.status === 'completed' ? 'Completed' : 
-    row.status === 'no_show' ? 'No Show' : 
-    row.status === 'pending' ? 'Pending' : 'Confirmed';
+    (row.status === 'no_show' || row.status === 'cancelled') ? 'Cancelled / No Show' : 
+    row.status === 'pending' ? 'Pending' : 'Approved';
+
   const badgeStyle =
-    row.status === 'claimed'
-      ? { background: '#F59E0B' }
-      : row.status === 'completed'
-        ? { background: '#10B981' }
-        : row.status === 'no_show'
-          ? { background: '#EF4444' }
-          : row.status === 'pending'
-            ? { background: '#6B7280' }
-            : {};
+    row.status === 'claimed' ? { background: '#F59E0B' } : 
+    row.status === 'completed' ? { background: '#10B981' } : 
+    (row.status === 'no_show' || row.status === 'cancelled') ? { background: '#EF4444' } : 
+    row.status === 'pending' ? { background: '#6B7280' } : 
+    { background: '#3B82F6' };
+
+  const isPast = new Date(row.date) < new Date(new Date().setHours(0, 0, 0, 0));
 
   const handleNoShow = () => {
     onStatusUpdate(row.id, 'no_show');
-  };
-
-  const handleMarkClaimed = () => {
-    onStatusUpdate(row.id, 'claimed');
   };
 
   const handleMarkCompleted = () => {
@@ -153,7 +147,7 @@ function AppointmentMgmtCard({ row, onStatusUpdate }) {
             <h4>{row.name}</h4>
             <span className="appt-time">
               <IconClock />
-              {row.time}
+              {new Date(row.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} at {row.time}
             </span>
           </div>
         </div>
@@ -190,30 +184,24 @@ function AppointmentMgmtCard({ row, onStatusUpdate }) {
         </div>
       </div>
       <div className="appt-mgmt-actions">
-        {row.status !== 'no_show' && (
-          <button type="button" className="appt-btn appt-btn-outline" onClick={handleNoShow}>
-            No show
-          </button>
-        )}
-        {row.status === 'confirmed' && (
-          <button type="button" className="appt-btn appt-btn-primary" onClick={handleMarkClaimed}>
-            Mark as claimed
-          </button>
-        )}
-        {row.status === 'claimed' && (
-          <button type="button" className="appt-btn appt-btn-primary" onClick={handleMarkCompleted}>
-            Mark as completed
-          </button>
-        )}
-        {row.status === 'completed' && (
+        {row.status === 'completed' ? (
           <button type="button" className="appt-btn appt-btn-primary" disabled>
             Completed
           </button>
-        )}
-        {row.status === 'no_show' && (
+        ) : row.status === 'no_show' || row.status === 'cancelled' ? (
           <button type="button" className="appt-btn appt-btn-outline" disabled>
-            No show
+            No show / Cancelled
           </button>
+        ) : (
+          isPast ? (
+            <button type="button" className="appt-btn appt-btn-outline" onClick={handleNoShow}>
+              Mark as No show
+            </button>
+          ) : (
+            <button type="button" className="appt-btn appt-btn-primary" onClick={handleMarkCompleted}>
+              Mark as completed
+            </button>
+          )
         )}
       </div>
     </article>
@@ -225,20 +213,13 @@ function formatDisplayDate(d) {
 }
 
 function AdminAppointments() {
-  const { userProfile, isAdministrator } = useAuth();
-  const [cursor, setCursor] = useState(() => new Date());
+  const role = getStoredRole();
   const [appointments, setAppointments] = useState([]);
   const [stats, setStats] = useState({ total: 0, completed: 0, residents: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const label = useMemo(() => formatDisplayDate(cursor), [cursor]);
 
-  // Redirect if not administrator
-  if (!userProfile) {
-    return <div>Loading...</div>;
-  }
-
-  if (!isAdministrator()) {
+  if (role !== 'admin') {
     return (
       <div className="unauthorized-container">
         <h2>Access Denied</h2>
@@ -251,19 +232,83 @@ function AdminAppointments() {
     try {
       setLoading(true);
       setError(null);
-      const dateStr = cursor.toISOString().split('T')[0];
-      const [appointmentsData, statsData, residentsCount] = await Promise.all([
-        appointmentService.getAppointmentsByDate(dateStr),
-        appointmentService.getAppointmentStats(dateStr),
-        appointmentService.getTotalResidents()
-      ]);
 
-      setAppointments(appointmentsData);
-      setStats({
-        total: statsData.total,
-        completed: statsData.completed,
-        residents: residentsCount
+      // Fetch global stats
+      const statsResponse = await fetch(`http://localhost:8080/api/stats/dashboard`, {
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
       });
+      if (statsResponse.ok) {
+        const statsData = await statsResponse.json();
+        setStats({
+          total: statsData.scheduledToday,
+          completed: statsData.completedToday,
+          residents: statsData.registeredResidents
+        });
+      }
+
+      // Fetch all appointments
+      const apptResponse = await fetch(`http://localhost:8080/api/appointments`, {
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
+      if (apptResponse.ok) {
+        const rawAppts = await apptResponse.json();
+        
+        // Map raw appointments to UI format
+        const formattedAppts = await Promise.all(rawAppts.map(async (apt) => {
+          let userName = 'Unknown Resident';
+          let userPhone = 'N/A';
+          let userEmail = 'N/A';
+          
+          if (apt.userId) {
+            try {
+              const userRes = await fetch(`http://localhost:8080/api/stats/users/${apt.userId}`);
+              if (userRes.ok) {
+                const userData = await userRes.json();
+                userName = `${userData.firstName} ${userData.lastName}`;
+                userPhone = userData.phoneNumber || 'N/A';
+                userEmail = userData.email || 'N/A';
+              }
+            } catch (e) {}
+          }
+
+          // Ensure time formatting if it comes as "09:00:00"
+          let displayTime = apt.appointmentTime;
+          if (displayTime && displayTime.includes(':')) {
+            const [h, m] = displayTime.split(':');
+            const hour = parseInt(h, 10);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const hour12 = hour % 12 || 12;
+            displayTime = `${hour12}:${m} ${ampm}`;
+          }
+
+          const formatEnum = (str) => {
+            if (!str) return '';
+            return str.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+          };
+
+          return {
+            id: apt.id,
+            name: userName,
+            date: apt.appointmentDate,
+            time: displayTime,
+            cert: formatEnum(apt.certificateType),
+            purpose: formatEnum(apt.purpose),
+            phone: userPhone,
+            email: userEmail,
+            status: apt.status.toLowerCase(),
+          };
+        }));
+
+        setAppointments(formattedAppts);
+      }
     } catch (error) {
       console.error('Error fetching appointments:', error);
       setError(error.message);
@@ -274,39 +319,36 @@ function AdminAppointments() {
 
   useEffect(() => {
     fetchAppointments();
-  }, [cursor]);
-
-  const shiftDay = (delta) => {
-    setCursor((prev) => {
-      const n = new Date(prev);
-      n.setDate(n.getDate() + delta);
-      return n;
-    });
-  };
+  }, []);
 
   const handleStatusUpdate = async (appointmentId, newStatus) => {
     try {
-      await appointmentService.updateAppointmentStatus(appointmentId, newStatus);
+      let endpoint = '';
+      if (newStatus === 'claimed') endpoint = 'claim';
+      else if (newStatus === 'completed') endpoint = 'complete';
+      else if (newStatus === 'no_show') endpoint = 'cancel';
+      
+      if (endpoint) {
+        await fetch(`http://localhost:8080/api/appointments/${appointmentId}/${endpoint}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: newStatus === 'no_show' ? JSON.stringify({ reason: 'No show' }) : null
+        });
+      }
       fetchAppointments(); // Refresh data
     } catch (error) {
       console.error('Error updating appointment status:', error);
     }
   };
 
-  // Separate appointments into AM and PM sessions
-  const amAppointments = appointments.filter(apt => {
-    const hour = parseInt(apt.time.split(':')[0]);
-    const period = apt.time.includes('AM') || apt.time.includes('PM');
-    if (!period) return hour < 12;
-    return apt.time.includes('AM');
-  });
+  const today = new Date();
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
-  const pmAppointments = appointments.filter(apt => {
-    const hour = parseInt(apt.time.split(':')[0]);
-    const period = apt.time.includes('AM') || apt.time.includes('PM');
-    if (!period) return hour >= 12;
-    return apt.time.includes('PM');
-  });
+  const activeAppointments = appointments.filter(apt => apt.status === 'approved' || apt.status === 'claimed' || apt.status === 'pending');
+  const todaysAppointments = activeAppointments.filter(apt => apt.date === todayStr);
+  const overdueAppointments = activeAppointments.filter(apt => apt.date < todayStr);
+  const upcomingAppointments = activeAppointments.filter(apt => apt.date > todayStr);
+  const completedAppointments = appointments.filter(apt => apt.status === 'completed' || apt.status === 'cancelled' || apt.status === 'no_show');
 
   return (
     <div className="appt-mgmt">
@@ -323,15 +365,6 @@ function AdminAppointments() {
             </span>
           </div>
         </div>
-        <div className="appt-date-nav">
-          <button type="button" className="appt-date-btn" onClick={() => shiftDay(-1)} aria-label="Previous day">
-            ‹
-          </button>
-          <div className="appt-date-label">{label}</div>
-          <button type="button" className="appt-date-btn" onClick={() => shiftDay(1)} aria-label="Next day">
-            ›
-          </button>
-        </div>
       </header>
 
       <div className="appt-stats-grid">
@@ -340,7 +373,7 @@ function AdminAppointments() {
             <IconCalendar />
           </div>
           <div>
-            <p className="appt-stat-label">Today&apos;s appointments</p>
+            <p className="appt-stat-label">Scheduled today</p>
             <h3 className="appt-stat-value">{loading ? '...' : stats.total}</h3>
           </div>
         </div>
@@ -349,7 +382,7 @@ function AdminAppointments() {
             <IconCheck />
           </div>
           <div>
-            <p className="appt-stat-label">Completed</p>
+            <p className="appt-stat-label">Completed today</p>
             <h3 className="appt-stat-value">{loading ? '...' : stats.completed}</h3>
           </div>
         </div>
@@ -364,17 +397,37 @@ function AdminAppointments() {
         </div>
       </div>
 
-      <div className="appt-two-col">
-        <SessionCard title="AM Session (8:00 AM – 12:00 PM)" count={amAppointments.length} emptyLabel="No appointments for AM session">
-          {amAppointments.map((row) => (
-            <AppointmentMgmtCard key={row.id} row={row} onStatusUpdate={handleStatusUpdate} />
-          ))}
-        </SessionCard>
-        <SessionCard title="PM Session (1:00 PM – 5:00 PM)" count={pmAppointments.length} emptyLabel="No appointments for PM session">
-          {pmAppointments.map((row) => (
-            <AppointmentMgmtCard key={row.id} row={row} onStatusUpdate={handleStatusUpdate} />
-          ))}
-        </SessionCard>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'start' }}>
+        
+        {/* Left Column */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          <SessionCard title="Today's Appointments" count={todaysAppointments.length} emptyLabel="No appointments scheduled for today">
+            {todaysAppointments.map((row) => (
+              <AppointmentMgmtCard key={row.id} row={row} onStatusUpdate={handleStatusUpdate} />
+            ))}
+          </SessionCard>
+
+          <SessionCard title="Completed / Cancelled" count={completedAppointments.length} emptyLabel="No completed or cancelled appointments">
+            {completedAppointments.map((row) => (
+              <AppointmentMgmtCard key={row.id} row={row} onStatusUpdate={handleStatusUpdate} />
+            ))}
+          </SessionCard>
+        </div>
+
+        {/* Right Column */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          <SessionCard title="Overdue Appointments" count={overdueAppointments.length} emptyLabel="No overdue appointments">
+            {overdueAppointments.map((row) => (
+              <AppointmentMgmtCard key={row.id} row={row} onStatusUpdate={handleStatusUpdate} />
+            ))}
+          </SessionCard>
+
+          <SessionCard title="Upcoming Appointments" count={upcomingAppointments.length} emptyLabel="No upcoming appointments">
+            {upcomingAppointments.map((row) => (
+              <AppointmentMgmtCard key={row.id} row={row} onStatusUpdate={handleStatusUpdate} />
+            ))}
+          </SessionCard>
+        </div>
       </div>
 
       {error && (

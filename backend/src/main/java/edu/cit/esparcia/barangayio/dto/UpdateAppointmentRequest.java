@@ -2,7 +2,7 @@ package edu.cit.esparcia.barangayio.dto;
 
 import edu.cit.esparcia.barangayio.model.CertificateTypeEnum;
 import edu.cit.esparcia.barangayio.model.PurposeEnum;
-import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -11,7 +11,7 @@ public class UpdateAppointmentRequest {
 
     private CertificateTypeEnum certificateType;
     
-    @Future(message = "Preferred date must be in the future")
+    @FutureOrPresent(message = "Preferred date must be in the future or present")
     private LocalDate preferredDate;
     
     private LocalTime preferredTime;
