@@ -1,5 +1,7 @@
 package edu.cit.esparcia.barangayio;
 
+import edu.cit.esparcia.barangayio.feature.auth.User;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
