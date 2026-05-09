@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:2:1-31:12
-INJECTED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:2:1-31:12
-INJECTED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:2:1-31:12
-INJECTED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:2:1-31:12
+ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:2:1-43:12
 MERGED from [androidx.databinding:viewbinding:8.2.2] C:\Users\earlg\.gradle\caches\9.0-milestone-1\transforms\a7a49ac1a7dbd2f03c7e6d17c47f7c22\transformed\jetified-viewbinding-8.2.2\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\earlg\.gradle\caches\9.0-milestone-1\transforms\c3a386cfef9b0e9cf0189b4e77ba6ee8\transformed\material-1.11.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\earlg\.gradle\caches\9.0-milestone-1\transforms\8347f06048b209cd5520d011695fb21e\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
@@ -61,8 +61,8 @@ ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\
 	android:name
 		ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:4:22-64
 application
-ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:6:5-29:19
-INJECTED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:6:5-29:19
+ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:6:5-41:19
+INJECTED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:6:5-41:19
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\earlg\.gradle\caches\9.0-milestone-1\transforms\c3a386cfef9b0e9cf0189b4e77ba6ee8\transformed\material-1.11.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\earlg\.gradle\caches\9.0-milestone-1\transforms\c3a386cfef9b0e9cf0189b4e77ba6ee8\transformed\material-1.11.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\earlg\.gradle\caches\9.0-milestone-1\transforms\8347f06048b209cd5520d011695fb21e\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
@@ -127,6 +127,30 @@ ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\
 		ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:28:13-37
 	android:name
 		ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:27:13-41
+activity#edu.cit.esparcia.barangayio.mobile.AppointmentsActivity
+ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:29:9-31:40
+	android:exported
+		ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:31:13-37
+	android:name
+		ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:30:13-49
+activity#edu.cit.esparcia.barangayio.mobile.BookingActivity
+ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:32:9-34:40
+	android:exported
+		ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:34:13-37
+	android:name
+		ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:33:13-44
+activity#edu.cit.esparcia.barangayio.mobile.AdminDashboardActivity
+ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:35:9-37:40
+	android:exported
+		ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:37:13-37
+	android:name
+		ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:36:13-51
+activity#edu.cit.esparcia.barangayio.mobile.AdminAppointmentDeskActivity
+ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:38:9-40:40
+	android:exported
+		ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:40:13-37
+	android:name
+		ADDED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml:39:13-57
 uses-sdk
 INJECTED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\earlg\OneDrive\Music\-IT342-Esparcia-Barangay.io\mobile\app\src\main\AndroidManifest.xml

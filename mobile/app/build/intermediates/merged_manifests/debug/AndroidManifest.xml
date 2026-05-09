@@ -43,6 +43,18 @@
         <activity
             android:name="edu.cit.esparcia.barangayio.mobile.HomeActivity"
             android:exported="false" />
+        <activity
+            android:name="edu.cit.esparcia.barangayio.mobile.AppointmentsActivity"
+            android:exported="false" />
+        <activity
+            android:name="edu.cit.esparcia.barangayio.mobile.BookingActivity"
+            android:exported="false" />
+        <activity
+            android:name="edu.cit.esparcia.barangayio.mobile.AdminDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name="edu.cit.esparcia.barangayio.mobile.AdminAppointmentDeskActivity"
+            android:exported="false" />
 
         <provider
             android:name="androidx.startup.InitializationProvider"

@@ -17,6 +17,21 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Check if user is already logged in
+        val sharedPref = getSharedPreferences("BarangayIO_Prefs", MODE_PRIVATE)
+        val userId = sharedPref.getString("USER_ID", "")
+        val role = sharedPref.getString("ROLE", "resident")
+        if (!userId.isNullOrEmpty()) {
+            if (role == "admin" || role == "ADMIN") {
+                startActivity(Intent(this, AdminDashboardActivity::class.java))
+            } else {
+                startActivity(Intent(this, HomeActivity::class.java))
+            }
+            finish()
+            return
+        }
+
         binding = LoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -43,10 +58,24 @@ class LoginActivity : AppCompatActivity() {
                 val response = RetrofitClient.instance.loginUser(LoginRequest(email, password))
                 if (response.isSuccessful) {
                     val loginResponse = response.body()
+                    if (loginResponse != null) {
+                        val sharedPref = getSharedPreferences("BarangayIO_Prefs", MODE_PRIVATE)
+                        with (sharedPref.edit()) {
+                            putString("USER_ID", loginResponse.userId)
+                            putString("FIRST_NAME", loginResponse.firstName)
+                            putString("LAST_NAME", loginResponse.lastName)
+                            putString("ROLE", loginResponse.role)
+                            apply()
+                        }
+                    }
+                    
                     Toast.makeText(this@LoginActivity, loginResponse?.message ?: "Login Successful", Toast.LENGTH_LONG).show()
                     
-                    val intent = Intent(this@LoginActivity, HomeActivity::class.java)
-                    startActivity(intent)
+                    if (loginResponse?.role?.lowercase() == "admin") {
+                        startActivity(Intent(this@LoginActivity, AdminDashboardActivity::class.java))
+                    } else {
+                        startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
+                    }
                     finish()
                 } else {
                     val errorBody = response.errorBody()?.string()

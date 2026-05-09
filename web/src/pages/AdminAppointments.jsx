@@ -184,15 +184,7 @@ function AppointmentMgmtCard({ row, onStatusUpdate }) {
         </div>
       </div>
       <div className="appt-mgmt-actions">
-        {row.status === 'completed' ? (
-          <button type="button" className="appt-btn appt-btn-primary" disabled>
-            Completed
-          </button>
-        ) : row.status === 'no_show' || row.status === 'cancelled' ? (
-          <button type="button" className="appt-btn appt-btn-outline" disabled>
-            No show / Cancelled
-          </button>
-        ) : (
+        {row.status === 'completed' || row.status === 'no_show' || row.status === 'cancelled' ? null : (
           isPast ? (
             <button type="button" className="appt-btn appt-btn-outline" onClick={handleNoShow}>
               Mark as No show

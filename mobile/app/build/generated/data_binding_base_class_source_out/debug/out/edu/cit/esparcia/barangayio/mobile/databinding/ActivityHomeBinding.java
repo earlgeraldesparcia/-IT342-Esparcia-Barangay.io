@@ -5,10 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.cardview.widget.CardView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import edu.cit.esparcia.barangayio.mobile.R;
@@ -18,24 +20,78 @@ import java.lang.String;
 
 public final class ActivityHomeBinding implements ViewBinding {
   @NonNull
-  private final ConstraintLayout rootView;
+  private final ScrollView rootView;
+
+  @NonNull
+  public final Button btnBookAppointment;
 
   @NonNull
   public final Button btnLogout;
 
   @NonNull
-  public final TextView tvWelcome;
+  public final CardView cardCompletedRequests;
 
-  private ActivityHomeBinding(@NonNull ConstraintLayout rootView, @NonNull Button btnLogout,
-      @NonNull TextView tvWelcome) {
+  @NonNull
+  public final CardView cardNextAppointment;
+
+  @NonNull
+  public final LinearLayout layoutCompletedRequest;
+
+  @NonNull
+  public final LinearLayout layoutNoUpcoming;
+
+  @NonNull
+  public final LinearLayout layoutUpcomingAppt;
+
+  @NonNull
+  public final TextView tvBookNow;
+
+  @NonNull
+  public final TextView tvCompletedDate;
+
+  @NonNull
+  public final TextView tvCompletedType;
+
+  @NonNull
+  public final TextView tvNoCompleted;
+
+  @NonNull
+  public final TextView tvUpcomingDate;
+
+  @NonNull
+  public final TextView tvUpcomingType;
+
+  @NonNull
+  public final TextView tvWelcomeName;
+
+  private ActivityHomeBinding(@NonNull ScrollView rootView, @NonNull Button btnBookAppointment,
+      @NonNull Button btnLogout, @NonNull CardView cardCompletedRequests,
+      @NonNull CardView cardNextAppointment, @NonNull LinearLayout layoutCompletedRequest,
+      @NonNull LinearLayout layoutNoUpcoming, @NonNull LinearLayout layoutUpcomingAppt,
+      @NonNull TextView tvBookNow, @NonNull TextView tvCompletedDate,
+      @NonNull TextView tvCompletedType, @NonNull TextView tvNoCompleted,
+      @NonNull TextView tvUpcomingDate, @NonNull TextView tvUpcomingType,
+      @NonNull TextView tvWelcomeName) {
     this.rootView = rootView;
+    this.btnBookAppointment = btnBookAppointment;
     this.btnLogout = btnLogout;
-    this.tvWelcome = tvWelcome;
+    this.cardCompletedRequests = cardCompletedRequests;
+    this.cardNextAppointment = cardNextAppointment;
+    this.layoutCompletedRequest = layoutCompletedRequest;
+    this.layoutNoUpcoming = layoutNoUpcoming;
+    this.layoutUpcomingAppt = layoutUpcomingAppt;
+    this.tvBookNow = tvBookNow;
+    this.tvCompletedDate = tvCompletedDate;
+    this.tvCompletedType = tvCompletedType;
+    this.tvNoCompleted = tvNoCompleted;
+    this.tvUpcomingDate = tvUpcomingDate;
+    this.tvUpcomingType = tvUpcomingType;
+    this.tvWelcomeName = tvWelcomeName;
   }
 
   @Override
   @NonNull
-  public ConstraintLayout getRoot() {
+  public ScrollView getRoot() {
     return rootView;
   }
 
@@ -60,19 +116,94 @@ public final class ActivityHomeBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.btnBookAppointment;
+      Button btnBookAppointment = ViewBindings.findChildViewById(rootView, id);
+      if (btnBookAppointment == null) {
+        break missingId;
+      }
+
       id = R.id.btnLogout;
       Button btnLogout = ViewBindings.findChildViewById(rootView, id);
       if (btnLogout == null) {
         break missingId;
       }
 
-      id = R.id.tvWelcome;
-      TextView tvWelcome = ViewBindings.findChildViewById(rootView, id);
-      if (tvWelcome == null) {
+      id = R.id.cardCompletedRequests;
+      CardView cardCompletedRequests = ViewBindings.findChildViewById(rootView, id);
+      if (cardCompletedRequests == null) {
         break missingId;
       }
 
-      return new ActivityHomeBinding((ConstraintLayout) rootView, btnLogout, tvWelcome);
+      id = R.id.cardNextAppointment;
+      CardView cardNextAppointment = ViewBindings.findChildViewById(rootView, id);
+      if (cardNextAppointment == null) {
+        break missingId;
+      }
+
+      id = R.id.layoutCompletedRequest;
+      LinearLayout layoutCompletedRequest = ViewBindings.findChildViewById(rootView, id);
+      if (layoutCompletedRequest == null) {
+        break missingId;
+      }
+
+      id = R.id.layoutNoUpcoming;
+      LinearLayout layoutNoUpcoming = ViewBindings.findChildViewById(rootView, id);
+      if (layoutNoUpcoming == null) {
+        break missingId;
+      }
+
+      id = R.id.layoutUpcomingAppt;
+      LinearLayout layoutUpcomingAppt = ViewBindings.findChildViewById(rootView, id);
+      if (layoutUpcomingAppt == null) {
+        break missingId;
+      }
+
+      id = R.id.tvBookNow;
+      TextView tvBookNow = ViewBindings.findChildViewById(rootView, id);
+      if (tvBookNow == null) {
+        break missingId;
+      }
+
+      id = R.id.tvCompletedDate;
+      TextView tvCompletedDate = ViewBindings.findChildViewById(rootView, id);
+      if (tvCompletedDate == null) {
+        break missingId;
+      }
+
+      id = R.id.tvCompletedType;
+      TextView tvCompletedType = ViewBindings.findChildViewById(rootView, id);
+      if (tvCompletedType == null) {
+        break missingId;
+      }
+
+      id = R.id.tvNoCompleted;
+      TextView tvNoCompleted = ViewBindings.findChildViewById(rootView, id);
+      if (tvNoCompleted == null) {
+        break missingId;
+      }
+
+      id = R.id.tvUpcomingDate;
+      TextView tvUpcomingDate = ViewBindings.findChildViewById(rootView, id);
+      if (tvUpcomingDate == null) {
+        break missingId;
+      }
+
+      id = R.id.tvUpcomingType;
+      TextView tvUpcomingType = ViewBindings.findChildViewById(rootView, id);
+      if (tvUpcomingType == null) {
+        break missingId;
+      }
+
+      id = R.id.tvWelcomeName;
+      TextView tvWelcomeName = ViewBindings.findChildViewById(rootView, id);
+      if (tvWelcomeName == null) {
+        break missingId;
+      }
+
+      return new ActivityHomeBinding((ScrollView) rootView, btnBookAppointment, btnLogout,
+          cardCompletedRequests, cardNextAppointment, layoutCompletedRequest, layoutNoUpcoming,
+          layoutUpcomingAppt, tvBookNow, tvCompletedDate, tvCompletedType, tvNoCompleted,
+          tvUpcomingDate, tvUpcomingType, tvWelcomeName);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

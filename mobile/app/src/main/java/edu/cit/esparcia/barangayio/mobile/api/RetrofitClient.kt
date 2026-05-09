@@ -6,8 +6,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    // Pointing directly to your local computer's IP where Spring Boot is running
-    private const val BASE_URL = "http://192.168.1.70:8080"
+    // Pointing to localhost because we've set up ADB Reverse Port Forwarding over USB!
+    private const val BASE_URL = "http://localhost:8080"
 
     private val logging = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
